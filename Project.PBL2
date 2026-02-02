@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <cstdlib>
 
 using namespace std;
 
@@ -28,7 +29,28 @@ void SwapChar(char &a, char &b) {
     b=t;
 }
 
-void OpenFile (string filename,string Id, float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int *p) {
+bool DangNhap() {
+    string UserDefault = "ADMIN";
+    string PassDefault = "123456";
+    string user, pass;
+    again3:
+    cout << "=======DANG NHAP HE THONG=======" << endl;
+    cout << "Username: ";
+    cin >> user;
+    cout << "Password: ";
+    cin >> pass;
+    if (user==UserDefault && pass==PassDefault) {
+        cout "[Thanh Cong] Chao mung admin vao he thong!" << endl;
+        return true;
+    }
+    else {
+        cout "Sai thong tin! Vui long dang nhap lai!" << endl;
+        return false;
+    }
+    goto again3;
+}
+
+void OpenFile (string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int *p) {
     ifstream InFile(filename);
     *p=0;
     if (Infile.is_open()) {
@@ -43,7 +65,7 @@ void OpenFile (string filename,string Id, float Lab1[], float Lab2[], float PT1[
     }
 }
 
-void SaveFile(string filename,string Id, float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int n) {
+void SaveFile(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int n) {
     ofstream OutFile(filename);
     if(filename.is_open()) {
         for(int i=0; i<n ;i++) {
@@ -57,7 +79,7 @@ void SaveFile(string filename,string Id, float Lab1[], float Lab2[], float PT1[]
     }
 }
 
-void NhapDiem(string filename,string Id, float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
+void NhapDiem(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
     int NumAdd;
     cout << "---CHUC NANG NHAP DIEM---" << endl;
     cout << "Nhap so luong sinh vien muon them" << endl;
@@ -85,7 +107,60 @@ void NhapDiem(string filename,string Id, float Lab1[], float Lab2[], float PT1[]
     SaveFile(filename,Id,Lab1,Lab2,PT1,PT2,Pres,FinalTest,*p);
 }
 
-void SapXep(string filename,string Id, float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p){
+void XemDiem(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
+    string MSV;
+    cout << "---CHUC NANG XEM DIEM---" << endl;
+    cout << "Nhap vao Ma sinh vien can xem: ";
+    cin >> MSV;
+    bool found = false;
+    for(int i=0; i<*p; i++) {
+        if(Id[i] == MSV) {
+            found = true;
+            cout << "Tim thay sinh vien: " << Id[i] << endl;
+            cout << "Danh sach cac cot diem cua sinh vien: " << endl;
+            cout << "1. Lab1: " << Lab1[i] << endl;
+            cout << "2. Lab2" << Lab2[i] << endl;
+            cout << "3. PT1" << PT1[i] << endl;
+            cout << "4. PT2" << PT2[i] << endl;
+            cout << "5. Pres" << Pres[i] << endl;
+            cout << "6. FinalTest" << FinalTest[i] << endl;
+            break;
+        }
+    }
+    if(!found) {
+        cout << "!Khong tim thay sinh vien co Ma: "<< MSV << endl;
+    }
+}
+
+void InRaDanhSach(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
+    if((*p)<=0) {
+        cout << "!Danh sach dang trong, vui long nhap du lieu truoc!" << endl;
+        return;
+    }
+    cout << "=====================DANH SACH DIEM CUA SINH VIEN=====================" << endl;
+    cout << left << setw(6) << "STT"
+         << setw(10) << "Ma SV"
+         << setw(8)  << "Lab1" 
+         << setw(8)  << "Lab2" 
+         << setw(8)  << "PT1" 
+         << setw(8)  << "PT2" 
+         << setw(8)  << "Pres" 
+         << setw(8)  << "Final" << endl;
+    cout << string(66,'-') << endl;
+    for(int i=0; i<*p; i++ ) {
+        cout << left << setw(6)  << i + 1
+         << setw(10) << Id[i]
+         << setw(8)  << Lab1[i]
+         << setw(8)  << Lab2[i]
+         << setw(8)  << PT1[i]
+         << setw(8)  << PT2[i]
+         << setw(8)  << Pres[i]
+         << setw(8)  << FinalTest[i] << endl;
+    }
+    cout << "----------------------------------------------------------------------" << endl;
+}
+
+void SapXep(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p){
     if((*p)==0) {
         cout << "Danh sach trong, khong the sap xep!" << endl;
         return;
@@ -118,7 +193,7 @@ void SapXep(string filename,string Id, float Lab1[], float Lab2[], float PT1[], 
     SaveFile(filename,Id,Lab1,Lab2,PT1,PT2,Pres,FinalTest,*p);
 }
 
-void SuaDiem(string filename,string Id, float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
+void SuaDiem(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
     string TimId;
     cout << "---CHUC NANG SUA DIEM---" << endl;
     cout << "Nhap vao Ma sinh vien can sua: ";
@@ -159,9 +234,25 @@ void SuaDiem(string filename,string Id, float Lab1[], float Lab2[], float PT1[],
     }
 }
 
+void ThoatCT(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[], int*p) {
+    char XacNhan;
+    cout << "Ban co chac chan muon thoat chuong trinh khong? (Y/N): ";
+    cin >> XacNhan;
+    if(XacNhan == 'Y' || XacNhan == 'y') {
+    cout << "Cam on ban da su dung phan mem. Tam biet!" << endl;
+    exit(0);
+    }
+    else {
+        cout << "Da huy lenh thoat. Quay lai Menu..." << endl;
+    }
+}
+
 int main () {
     string FileName = "Mon_Giai_Tich.txt";
     OpenFile(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n);
+    if(DangNhap()==false) {
+        return 0;
+    }
     again1:
     int choice;
     cout << "---QUAN LY DIEM CUA SINH VIEN---" << endl;

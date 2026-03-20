@@ -14,7 +14,7 @@ int n=0;
 void SwapFloat(float &a, float &b) {
     float t=a;
     a=b;
-    b=t
+    b=t;
 }
 
 void SwapString(string &a, string &b) {
@@ -40,11 +40,11 @@ bool DangNhap() {
     cout << "Password: ";
     cin >> pass;
     if (user==UserDefault && pass==PassDefault) {
-        cout "[Thanh Cong] Chao mung admin vao he thong!" << endl;
+        cout << "[Thanh Cong] Chao mung admin vao he thong!" << endl;
         return true;
     }
     else {
-        cout "Sai thong tin! Vui long dang nhap lai!" << endl;
+        cout << "Sai thong tin! Vui long dang nhap lai!" << endl;
         return false;
     }
     goto again3;
@@ -53,7 +53,7 @@ bool DangNhap() {
 void OpenFile (string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int *p) {
     ifstream InFile(filename);
     *p=0;
-    if (Infile.is_open()) {
+    if (InFile.is_open()) {
         while (InFile >> Id[*p] >> Lab1[*p] >> Lab2[*p] >> PT1[*p] >> PT2[*p] >> Pres[*p] >> FinalTest[*p]){
         (*p)++;
         }
@@ -67,7 +67,7 @@ void OpenFile (string filename,string Id[], float Lab1[], float Lab2[], float PT
 
 void SaveFile(string filename,string Id[], float Lab1[], float Lab2[], float PT1[], float PT2[], float Pres[], float FinalTest[],int n) {
     ofstream OutFile(filename);
-    if(filename.is_open()) {
+    if(OutFile.is_open()) {
         for(int i=0; i<n ;i++) {
             OutFile << Id[i] << Lab1[i] << Lab2[i] << PT1[i] << PT2[i] << Pres[i] << FinalTest[i] << endl;
         }
@@ -75,7 +75,7 @@ void SaveFile(string filename,string Id[], float Lab1[], float Lab2[], float PT1
         cout << "Luu File thanh cong" << endl;
     }
     else {
-        cout << "Luu File khong thanh cong"<< end;
+        cout << "Luu File khong thanh cong" << endl;
     }
 }
 
@@ -90,7 +90,7 @@ void NhapDiem(string filename,string Id[], float Lab1[], float Lab2[], float PT1
     }
     for (int i=0; i<NumAdd; i++) {
         int pos= *p;
-        cout << "Nhap du lieu cho sinh vien thu " << pos+1 <<" :" endl;
+        cout << "Nhap du lieu cho sinh vien thu " << pos+1 <<" :" << endl;
         cout << "1. Ma sinh vien: ";
         cin >> Id[pos];
         cout << "2. Diem Lab1 & Lab2: ";
@@ -166,7 +166,7 @@ void SapXep(string filename,string Id[], float Lab1[], float Lab2[], float PT1[]
         return;
     }
     float GPA[Max];
-    char = DiemChu[Max];
+    char DiemChu[Max];
     for(int i=0; i<*p; i++) {
         GPA[i]=((Lab1[i]+Lab2[i]+PT1[i]+PT2[i]+Pres[i])/5)*0.4+FinalTest[i]*0.6;
         if (GPA[i] >= 8.5) DiemChu[i] = 'A';
@@ -179,7 +179,7 @@ void SapXep(string filename,string Id[], float Lab1[], float Lab2[], float PT1[]
         for (int j=i+1;j<*p;j++) {
             if(GPA[i]<GPA[j]) {
                 SwapFloat(GPA[i],GPA[j]);
-                SwapChar(DiemChu[i],DiemChu[j];)
+                SwapChar(DiemChu[i],DiemChu[j]);
                 SwapFloat(Lab1[i],Lab2[j]);
                 SwapFloat(PT1[i],PT1[j]);
                 SwapFloat(PT2[i],PT2[j]);
@@ -264,8 +264,8 @@ int main () {
         case 2: XemDiem(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
         case 3: SuaDiem(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
         case 4: SapXep(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
-        case 5: InRa(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
-        case 6: Thoat(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
+        case 5: InRaDanhSach(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
+        case 6: ThoatCT(FileName, Id, Lab1, Lab2, PT1, PT2, Pres, FinalTest, &n); break;
         default : cout << "Chon sai chuc nang!. Vui long chon lai." << endl;
         goto again1;
     }
